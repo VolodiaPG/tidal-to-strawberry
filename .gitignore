@@ -1,0 +1,31 @@
+# Whitelist - ignore everything by default
+*
+!*/
+!/.gitignore
+
+# Allow specific file types and configurations
+!.envrc
+!devenv.nix
+!devenv.yaml
+!devenv.lock
+!flake.nix
+!flake.lock
+!vars.sh
+!Dockerfile*
+!OpenCode.md
+!justfile
+
+!*.py
+
+# Still blacklist
+.direnv
+deps/
+_build/
+# Devenv
+.devenv*
+devenv.local.nix
+
+# direnv
+.direnv
+
+# pre-commit
