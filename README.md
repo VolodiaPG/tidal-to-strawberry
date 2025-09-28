@@ -4,7 +4,7 @@ This repository contains utilities to help export Tidal playlists to Strawberry 
 
 ## Requirements
 
-- Nix package manager (or use Python directly, package requirements are listed in `flake.nix`)
+- Nix package manager (or use Python directly, package requirements are `tidalapi`, `beautifulsoup4`, and `lxml`)
 - Tidal account
 - Strawberry Music Player
 
