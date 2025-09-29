@@ -8,7 +8,7 @@ import bs4
 import tidalapi
 
 
-def add_track(xml, track_elem):
+def add_track(xml, track_elem, num):
     # print(track_elem.__dir__())
 
     track = xml.new_tag("track")
@@ -27,10 +27,10 @@ def add_track(xml, track_elem):
     track.album.string = track_elem.album.name
 
     track.insert(4, xml.new_tag("trackNum"))
-    track.trackNum.string = str(track_elem.track_num)
+    track.trackNum.string = str(num)
 
     track.insert(5, xml.new_tag("duration"))
-    track.trackNum.string = str(track_elem.duration)
+    track.duration.string = str(track_elem.duration * 1000)
 
     return track
 
@@ -60,7 +60,7 @@ for playlist in my_playlists:
         line.strip() for line in text.splitlines() if line.strip()
     )
     for i, track_elem in enumerate(playlist.tracks()):
-        track = add_track(xml, track_elem)
+        track = add_track(xml, track_elem, i + 1)
         trackList.insert(i, track)
 
     xml = str(xml)
