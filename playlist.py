@@ -9,8 +9,6 @@ import tidalapi
 
 
 def add_track(xml, track_elem, num):
-    # print(track_elem.__dir__())
-
     track = xml.new_tag("track")
     track_name = track_elem.name
 
@@ -60,6 +58,9 @@ for playlist in my_playlists:
         line.strip() for line in text.splitlines() if line.strip()
     )
     for i, track_elem in enumerate(playlist.tracks()):
+        if not track_elem.available:
+            continue
+
         track = add_track(xml, track_elem, i + 1)
         trackList.insert(i, track)
 
