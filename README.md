@@ -16,9 +16,11 @@ A collection of tools for working with Tidal playlists and exporting them to XSP
 
 ## Installation
 
-### Using Nix
+There are two primary ways to install and use this tool:
 
-If you have Nix with flakes enabled, you can use this package directly:
+### Option 1: Using Nix with Flakes
+
+If you have Nix with flakes enabled, you can use the package directly without any additional installation:
 
 ```bash
 # To run the login script
@@ -31,20 +33,41 @@ nix run github:volodiapg/tidalplaylist#playlist
 nix run github:volodiapg/tidalplaylist#daily
 ```
 
-### Development Installation
+### Option 2: Using Python
 
-For development, clone this repository and install in development mode:
+You can install and use the package with Python (requires Python 3.8+):
+
+```bash
+# Install from PyPI
+pip install tidalplaylist
+
+# Or clone and install locally
+git clone https://github.com/volodiapg/tidalplaylist.git
+cd tidalplaylist
+pip install -e .
+```
+
+This will install the required dependencies (`tidalapi`, `beautifulsoup4`, and `lxml`) and make the command-line tools available.
+
+### Development Setup
+
+For development, clone this repository and set up your environment:
 
 ```bash
 git clone https://github.com/volodiapg/tidalplaylist.git
 cd tidalplaylist
 
-# Using nix
+# Option 1: Using nix
 nix develop
-pip install -e .
 
-# Or using pip directly
+# Option 2: Using pip directly
 pip install -e .
+```
+
+And then, to run the `login` script for example:
+
+```bash
+python -m tidalplaylist.bin.login
 ```
 
 ## Usage
@@ -93,3 +116,4 @@ This will export your Tidal daily discovery mix to an XSPF file named "Daily dis
 - Strawberry's configuration file is located at `~/.config/strawberry/strawberry.conf`
 - All commands require an active internet connection
 - Import the generated .xspf files into Strawberry Music Player through File > Open or by dragging them into the playlist area
+
