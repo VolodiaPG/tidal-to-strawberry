@@ -51,6 +51,8 @@ This will install the required dependencies (`tidalapi`, `beautifulsoup4`, and `
 
 ### Development Setup
 
+<details>
+
 For development, clone this repository and set up your environment:
 
 ```bash
@@ -69,6 +71,8 @@ And then, to run the `login` script for example:
 ```bash
 python -m tidalplaylist.bin.login
 ```
+
+</details>
 
 ## Usage
 
