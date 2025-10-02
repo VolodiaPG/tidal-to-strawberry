@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools>=42", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "tidalplaylist"
+version = "0.1.0"
+description = "Tidal playlist tools with Python"
+readme = "README.md"
+requires-python = ">=3.8"
+license = {text = "MIT"}
+dependencies = [
+    "tidalapi",
+    "beautifulsoup4",
+    "lxml",
+]
+
+[project.scripts]
+tidal-login = "tidalplaylist.bin.login:main"
+tidal-playlist = "tidalplaylist.bin.playlist:main"
+tidal-daily = "tidalplaylist.bin.daily:main"

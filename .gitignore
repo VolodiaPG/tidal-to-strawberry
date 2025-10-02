@@ -15,6 +15,7 @@
 !OpenCode.md
 !justfile
 !README.md
+!pyproject.toml
 
 !*.py
 
