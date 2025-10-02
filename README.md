@@ -1,81 +1,95 @@
-# Tidal to Strawberry Utils
+# Tidal Playlist Tools
 
-This repository contains utilities to help export Tidal playlists to Strawberry Music Player format and configure Tidal integration with Strawberry.
+A collection of tools for working with Tidal playlists and exporting them to XSPF format for use with other media players like Strawberry.
+
+## Features
+
+- Login to Tidal and update Strawberry config
+- Export all your Tidal playlists to XSPF format
+- Export your daily discovery mix to XSPF format
 
 ## Requirements
 
-- Nix package manager (or use Python directly, package requirements are `tidalapi`, `beautifulsoup4`, and `lxml`)
+- Nix package manager (or use Python directly with `tidalapi`, `beautifulsoup4`, and `lxml`)
 - Tidal account
-- Strawberry Music Player
+- Strawberry Music Player (optional, for the integration features)
 
-## Installing Nix
+## Installation
 
-If you don't have Nix installed yet, follow the steps at [nixos.org](https://nixos.org/download.html).
+### Using Nix
 
-## Running Without Cloning
-
-You can run this project directly without cloning the repository using `nix run`:
+If you have Nix with flakes enabled, you can use this package directly:
 
 ```bash
 # To run the login script
-nix run github:volodiapg/tidal-to-strawberry#login
+nix run github:volodiapg/tidalplaylist#login
 
 # To run the playlist export script
-nix run github:volodiapg/tidal-to-strawberry#playlist
+nix run github:volodiapg/tidalplaylist#playlist
+
+# To run the daily discovery export script
+nix run github:volodiapg/tidalplaylist#daily
+```
+
+### Development Installation
+
+For development, clone this repository and install in development mode:
+
+```bash
+git clone https://github.com/volodiapg/tidalplaylist.git
+cd tidalplaylist
+
+# Using nix
+nix develop
+pip install -e .
+
+# Or using pip directly
+pip install -e .
 ```
 
 ## Usage
 
-### Login to Tidal (login.py)
+The package provides three main commands:
 
-This script authenticates with Tidal and configures Strawberry Music Player to use your Tidal account:
+### Login to Tidal (tidal-login)
 
-1. Run the login script:
+```bash
+# Using nix
+nix run .#login
 
-   ```bash
-   nix run .#login
-   ```
+# Or directly
+tidal-login
+```
 
-   or
+This will authenticate with Tidal and save your session credentials. If you use Strawberry Music Player, it will also update its configuration with your Tidal credentials.
 
-   ```bash
-   nix develop
-   python login.py
-   ```
+### Export Playlists (tidal-playlist)
 
-2. Follow the authentication prompts in your web browser.
+```bash
+# Using nix
+nix run .#playlist
 
-3. Once authenticated, the script will:
-   - Save your Tidal session credentials
-   - Update your Strawberry configuration file with the necessary Tidal settings
+# Or directly
+tidal-playlist
+```
 
-### Export Playlists (playlist.py)
+This will export all your Tidal playlists to XSPF files in the current directory.
 
-This script exports all your Tidal playlists to XSPF format, which can be imported into Strawberry:
+### Export Daily Discovery Mix (tidal-daily)
 
-1. Run the playlist export script:
+```bash
+# Using nix
+nix run .#daily
 
-   ```bash
-   nix run .#playlist
-   ```
+# Or directly
+tidal-daily
+```
 
-   or
-
-   ```bash
-   nix develop
-   python playlist.py
-   ```
-
-2. The script will:
-   - Connect to your Tidal account using saved credentials
-   - Fetch all your playlists (including favorites)
-   - Export each playlist to an XSPF file in the current directory
-
-3. Import the generated .xspf files into Strawberry Music Player through File > Open or by dragging them into the playlist area.
+This will export your Tidal daily discovery mix to an XSPF file named "Daily discovery.xspf" in the current directory.
 
 ## Notes
 
 - The Tidal session is stored in a file named `tidal-session-pkce.json` in the current directory
 - Strawberry's configuration file is located at `~/.config/strawberry/strawberry.conf`
-- Both scripts require an active internet connection
-
+- All commands require an active internet connection
+- Import the generated .xspf files into Strawberry Music Player through File > Open or by dragging them into the playlist area
