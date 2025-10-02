@@ -1,11 +1,13 @@
-import json
 import pathlib
-import sys
-from configparser import ConfigParser
-from pathlib import Path
 
 import bs4
-import tidalapi
+from tidalapi.media import Track
+
+from login import login_tidal
+
+
+def cleantext(text):
+    return " ".join(line.strip() for line in text.splitlines() if line.strip())
 
 
 def add_track(xml, track_elem, num):
@@ -33,31 +35,19 @@ def add_track(xml, track_elem, num):
     return track
 
 
-session_file1 = Path("tidal-session-pkce.json")
-session = tidalapi.Session()
-# Load session from file; create a new session if necessary
-session.login_session_file(session_file1, do_pkce=True)
-
-my_playlists = session.user.playlist_and_favorite_playlists()
-
-for playlist in my_playlists:
-    playlist_name = playlist.name
-
+def export_playlist(tracks: list[Track]):
     xml = bs4.BeautifulSoup(
         """
-        <playlist version="1" xmlns="http://xspf.org/ns/0/">
-            <trackList>
-            </trackList>
-        </playlist>
-    """,
+           <playlist version="1" xmlns="http://xspf.org/ns/0/">
+               <trackList>
+               </trackList>
+           </playlist>
+        """,
         "xml",
     )
     trackList = xml.find("trackList")
 
-    cleantext = lambda text: " ".join(
-        line.strip() for line in text.splitlines() if line.strip()
-    )
-    for i, track_elem in enumerate(playlist.tracks()):
+    for i, track_elem in enumerate(tracks):
         if not track_elem.available:
             continue
 
@@ -66,5 +56,17 @@ for playlist in my_playlists:
 
     xml = str(xml)
     xml = "\n".join(line.strip() for line in xml.splitlines() if line.strip())
-    pathlib.Path(f"{playlist_name}.xspf").write_text(xml)
-    print(f"Exported '{playlist_name}'!")
+    return xml
+
+
+if __name__ == "__main__":
+    session = login_tidal()
+    my_playlists = session.user.playlist_and_favorite_playlists()
+
+    for playlist in my_playlists:
+        playlist_name = playlist.name
+
+        xml = export_playlist(playlist.tracks())
+
+        pathlib.Path(f"{playlist_name}.xspf").write_text(xml)
+        print(f"Exported '{playlist_name}'!")
