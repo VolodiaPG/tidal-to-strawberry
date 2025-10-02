@@ -72,7 +72,7 @@ python -m tidalplaylist.bin.login
 
 ## Usage
 
-The package provides three main commands:
+The package provides three main commands, once cloned locally:
 
 ### Login to Tidal (tidal-login)
 
