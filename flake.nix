@@ -51,7 +51,7 @@
             type = "app";
             program =
               let
-                script = pkgs.writeShellScriptBin "tidal" ''
+                script = pkgs.writeScriptBin "tidal" ''
                   ${tidalPlaylist}/bin/tidal-login
                   ${tidalPlaylist}/bin/tidal-playlist
                   ${tidalPlaylist}/bin/tidal-daily
