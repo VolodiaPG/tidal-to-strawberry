@@ -24,16 +24,16 @@ If you have Nix with flakes enabled, you can use the package directly without an
 
 ```bash
 # To run the login script
-nix run github:volodiapg/tidalplaylist#login
+nix run github:volodiapg/tidal-to-strawberry#login
 
 # To run the playlist export script
-nix run github:volodiapg/tidalplaylist#playlist
+nix run github:volodiapg/tidal-to-strawberry#playlist
 
 # To run the daily discovery export script
-nix run github:volodiapg/tidalplaylist#daily
+nix run github:volodiapg/tidal-to-strawberry#daily
 
 # To run all at once:
-nix run github:volodiapg
+nix run github:volodiapg/tidal-to-strawberry
 ```
 
 ### Option 2: Using Python
@@ -41,12 +41,8 @@ nix run github:volodiapg
 You can install and use the package with Python (requires Python 3.8+):
 
 ```bash
-# Install from PyPI
-pip install tidalplaylist
-
-# Or clone and install locally
-git clone https://github.com/volodiapg/tidalplaylist.git
-cd tidalplaylist
+git clone https://github.com/volodiapg/tidal-to-strawberry.git
+cd tidal-to-strawberry
 pip install -e .
 ```
 
@@ -59,8 +55,8 @@ This will install the required dependencies (`tidalapi`, `beautifulsoup4`, and `
 For development, clone this repository and set up your environment:
 
 ```bash
-git clone https://github.com/volodiapg/tidalplaylist.git
-cd tidalplaylist
+git clone https://github.com/volodiapg/tidal-to-strawberry.git
+cd tidal-to-strawberry
 
 # Option 1: Using nix
 nix develop
