@@ -47,6 +47,18 @@
         };
 
         apps = {
+          default = {
+            type = "app";
+            program =
+              let
+                script = pkgs.writeShellScriptBin "tidal" ''
+                  ${tidalPlaylist}/bin/tidal-login
+                  ${tidalPlaylist}/bin/tidal-playlist
+                  ${tidalPlaylist}/bin/tidal-daily
+                '';
+              in
+              "${script}/bin/tidal";
+          };
           login = {
             type = "app";
             program = "${tidalPlaylist}/bin/tidal-login";
@@ -65,3 +77,4 @@
       }
     );
 }
+

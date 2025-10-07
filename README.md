@@ -31,6 +31,9 @@ nix run github:volodiapg/tidalplaylist#playlist
 
 # To run the daily discovery export script
 nix run github:volodiapg/tidalplaylist#daily
+
+# To run all at once:
+nix run github:volodiapg
 ```
 
 ### Option 2: Using Python
@@ -120,4 +123,3 @@ This will export your Tidal daily discovery mix to an XSPF file named "Daily dis
 - Strawberry's configuration file is located at `~/.config/strawberry/strawberry.conf`
 - All commands require an active internet connection
 - Import the generated .xspf files into Strawberry Music Player through File > Open or by dragging them into the playlist area
-
