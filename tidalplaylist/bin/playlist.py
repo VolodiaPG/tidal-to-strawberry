@@ -20,7 +20,7 @@ async def process_playlist(playlist):
     print(f"Exported '{playlist_name}'!")
 
 
-async def main():
+async def main_async():
     session = login_tidal()
     my_playlists = session.user.playlists()
 
@@ -28,6 +28,10 @@ async def main():
     await asyncio.gather(*[process_playlist(playlist) for playlist in my_playlists])
 
 
+def main():
+    asyncio.run(main_async())
+
+
 if __name__ == "__main__":
-    asyncio.run(main())
+    main()
 
