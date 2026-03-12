@@ -75,6 +75,137 @@
           };
         };
       }
-    );
-}
+    )
+    // {
+      # Home Manager module
+      homeManagerModules.default =
+        {
+          config,
+          lib,
+          pkgs,
+          ...
+        }:
+        let
+          cfg = config.services.tidal-to-strawberry;
+          tidalPlaylist = pkgs.python3Packages.buildPythonPackage {
+            pname = "tidalplaylist";
+            version = "0.1.0";
+            format = "setuptools";
+            src = ./.;
+            propagatedBuildInputs = with pkgs.python3Packages; [
+              tidalapi
+              beautifulsoup4
+              lxml
+            ];
+            doCheck = false;
+          };
 
+          tidalScript = pkgs.writeShellScript "tidal-runner" ''
+            set -e
+
+            WORKING_DIR="${cfg.workingDirectory}"
+            SESSION_FILE="$WORKING_DIR/tidal-session-pkce.json"
+
+            if [ ! -f "$SESSION_FILE" ]; then
+              echo "Error: Session file not found: $SESSION_FILE" >&2
+              echo "Please run tidal-login first to create the session file." >&2
+              exit 1
+            fi
+
+            cd "$WORKING_DIR"
+            ${tidalPlaylist}/bin/tidal-login
+            ${tidalPlaylist}/bin/tidal-playlist
+            ${tidalPlaylist}/bin/tidal-daily
+          '';
+        in
+        {
+          options.services.tidal-to-strawberry = {
+            enable = lib.mkEnableOption "Tidal to Strawberry sync service";
+
+            workingDirectory = lib.mkOption {
+              type = lib.types.str;
+              default = "''";
+              description = "Directory where to run the tidal scripts. Must contain tidal-session-pkce.json file.";
+            };
+
+            schedule = lib.mkOption {
+              type = lib.types.enum [
+                "boot"
+                "daily"
+                "both"
+              ];
+              default = "both";
+              description = "When to run the service: boot (after boot), daily (daily timer), or both.";
+            };
+
+            dailyTime = lib.mkOption {
+              type = lib.types.str;
+              default = "09:00";
+              description = "Time of day to run the daily sync (HH:MM format). Only used when schedule is 'daily' or 'both'.";
+            };
+          };
+
+          config = lib.mkIf cfg.enable {
+            assertions = [
+              {
+                assertion = cfg.workingDirectory != "";
+                message = "services.tidal-to-strawberry.workingDirectory must be set";
+              }
+            ];
+
+            systemd.user.services.tidal-to-strawberry = {
+              Unit = {
+                Description = "Tidal to Strawberry sync service";
+                After = [ "graphical-session.target" ];
+              };
+
+              Service = {
+                Type = "oneshot";
+                ExecStart = tidalScript;
+                StandardOutput = "journal";
+                StandardError = "journal";
+              };
+            };
+
+            systemd.user.timers.tidal-to-strawberry =
+              lib.mkIf (cfg.schedule == "daily" || cfg.schedule == "both")
+                {
+                  Unit = {
+                    Description = "Daily Tidal to Strawberry sync";
+                  };
+
+                  Timer = {
+                    OnCalendar = "*-*-* ${cfg.dailyTime}:00";
+                    Persistent = true;
+                    Unit = "tidal-to-strawberry.service";
+                  };
+
+                  Install = {
+                    WantedBy = [ "timers.target" ];
+                  };
+                };
+
+            # Enable the service on boot if schedule is "boot" or "both"
+            systemd.user.services.tidal-to-strawberry-boot =
+              lib.mkIf (cfg.schedule == "boot" || cfg.schedule == "both")
+                {
+                  Unit = {
+                    Description = "Tidal to Strawberry sync at boot";
+                    After = [ "graphical-session.target" ];
+                  };
+
+                  Service = {
+                    Type = "oneshot";
+                    ExecStart = tidalScript;
+                    StandardOutput = "journal";
+                    StandardError = "journal";
+                  };
+
+                  Install = {
+                    WantedBy = [ "default.target" ];
+                  };
+                };
+          };
+        };
+    };
+}
