@@ -46,8 +46,9 @@
           ];
         };
 
-        apps = {
-          default = {
+        apps = rec {
+          default = tidal-to-strawberry;
+          tidal-to-strawberry = {
             type = "app";
             program =
               let
@@ -164,6 +165,8 @@
                 ExecStart = tidalScript;
                 StandardOutput = "journal";
                 StandardError = "journal";
+                Restart = "on-failure";
+                RestartSec = "30s";
               };
             };
 
