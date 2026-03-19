@@ -21,16 +21,16 @@ def update_strawberry_config(session):
         "refresh_token": session.refresh_token,
     }
 
-    strawberry_conf_file["Tidal"]["Type"] = "2"
-    strawberry_conf_file["Tidal"]["Streamurl"] = "2"
-    strawberry_conf_file["Tidal"]["Oauth"] = "true"
-    strawberry_conf_file["Tidal"]["Enabled"] = "true"
-    strawberry_conf_file["Tidal"]["Client_id"] = session.config.client_id_pkce
-    strawberry_conf_file["Tidal"]["Quality"] = "HI_RES_LOSSLESS"
-    strawberry_conf_file["Tidal"]["Country_code"] = "PL"
-    strawberry_conf_file["Tidal"]["Token_type"] = "Bearer"
-    strawberry_conf_file["Tidal"]["Access_token"] = creds["access_token"]
-    strawberry_conf_file["Tidal"]["Refresh_token"] = creds["refresh_token"]
+    strawberry_conf_file["Tidal"]["type"] = "2"
+    strawberry_conf_file["Tidal"]["streamurl"] = "2"
+    strawberry_conf_file["Tidal"]["oauth"] = "true"
+    strawberry_conf_file["Tidal"]["enabled"] = "true"
+    strawberry_conf_file["Tidal"]["client_id"] = session.config.client_id_pkce
+    strawberry_conf_file["Tidal"]["quality"] = "HI_RES_LOSSLESS"
+    strawberry_conf_file["Tidal"]["country_code"] = "PL"
+    strawberry_conf_file["Tidal"]["token_type"] = "Bearer"
+    strawberry_conf_file["Tidal"]["access_token"] = creds["access_token"]
+    strawberry_conf_file["Tidal"]["refresh_token"] = creds["refresh_token"]
 
     with open(strawberry_conf_file_path, "w") as configfile:
         strawberry_conf_file.write(configfile)
