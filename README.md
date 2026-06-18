@@ -1,6 +1,7 @@
 # Tidal Playlist Tools
 
-A collection of tools for working with Tidal playlists and exporting them to XSPF format for use with other media players like Strawberry.
+A collection of tools for working with Tidal playlists and exporting them to XSPF format for use with other media players like Strawberry. 
+If you wish to use Tidal on linux with full bit-perfect lossless audio, I can recommend [Sone](https://github.com/lullabyX/sone).
 
 ## Features
 
